@@ -1,3 +1,4 @@
+require 'powerdns_db_cli'
 require 'powerdns_dyndns/credentials'
 require 'sinatra'
 
@@ -9,15 +10,29 @@ module PowerDNS
       end
 
       get '/nic/update' do
-        return 400 unless params_valid?
-        200
+        ip = request['myip']
+
+        return 400 unless ip_valid?(ip)
+
+        records = PowerDNS::DB::Record
+          .where(name: request['hostname'])
+
+        return 400 if records.size != 1
+
+        return 200 if record.content == ip
+
+        400
       end
 
       private
 
-      def params_valid?
-        return false if request['hostname'].nil? || request['myip'].nil?
-        true
+      def ip_valid?(a)
+        return false if a.nil? || a.empty? || a == '0.0.0.0'
+        a = Addrinfo.ip(a)
+      rescue SocketError
+        false
+      else
+        a.ipv4? && !(a.ipv4_loopback? || a.ipv4_multicast? || a.ipv4_private?)
       end
     end
   end
