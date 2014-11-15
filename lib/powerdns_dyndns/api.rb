@@ -1,5 +1,6 @@
 require 'powerdns_db_cli'
 require 'powerdns_dyndns/credentials'
+require 'powerdns_dyndns/database'
 require 'sinatra'
 
 module PowerDNS
@@ -14,12 +15,20 @@ module PowerDNS
 
         return 400 unless ip_valid?(ip)
 
-        records = PowerDNS::DB::Record
-          .where(name: request['hostname'])
+        Database.connect!
+
+        records = DB::Record.where(name: request['hostname'])
 
         return 400 if records.size != 1
 
-        return 200 if record.content == ip
+        record = records.first
+
+        if record.content != ip
+          record.content = ip
+          record.save!
+
+          return 200
+        end
 
         400
       end

@@ -4,12 +4,12 @@ describe API do
   def app; API; end
 
   context 'unauthorized' do
-    it '/' do
+    it 'get / -> 401' do
       get '/'
       expect(last_response.status).to eq(401)
     end
 
-    it '/nic/update' do
+    it 'get /nic/update -> 401' do
       get '/nic/update'
       expect(last_response.status).to eq(401)
     end
@@ -45,10 +45,34 @@ describe API do
         end
 
         context 'valid' do
-          it 'get /nic/update (23.23.23.23) -> 200' do
-            # Just test, if valid IPv4 address "gets through" IP filter.
-            expect { get '/nic/update', myip: '23.23.23.23' }.to \
-              raise_error(ActiveRecord::ConnectionNotEstablished)
+          before do
+            Database.connect!
+            DB::Record.create!(name: 'example.org', content: '23.23.23.23')
+          end
+
+          after do
+            DB::Record.all.destroy_all
+          end
+
+          it 'get /nic/update (23.23.23.23) -> 400' do
+            get '/nic/update', myip: '23.23.23.23'
+            expect(last_response.status).to eq(400)
+          end
+
+          it 'get /nic/update (23.23.23.23, example.com) -> 400' do
+            get '/nic/update', myip: '23.23.23.23', hostname: 'example.com'
+            expect(last_response.status).to eq(400)
+          end
+
+          it 'get /nic/update (23.23.23.23, example.org) -> 400' do
+            get '/nic/update', myip: '23.23.23.23', hostname: 'example.org'
+            expect(last_response.status).to eq(400)
+          end
+
+          it 'get /nic/update (23.23.23.24, example.org) -> 200' do
+            get '/nic/update', myip: '23.23.23.24', hostname: 'example.org'
+            expect(last_response.status).to eq(200)
+            expect(DB::Record.first.content).to eq('23.23.23.24')
           end
         end
       end
