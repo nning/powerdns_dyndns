@@ -4,23 +4,24 @@ module PowerDNS
       include Singleton
       
       def initialize
-        self.merge! \
-          YAML.load_file \
-            File.expand_path \
-              File.join \
-                File.dirname(__FILE__),
-                '..',
-                '..',
-                'settings.yml'
+        paths.each do |path|
+          begin
+            self.merge!(YAML.load_file(File.expand_path(path)))
+          rescue Errno::ENOENT
+          end
+        end
       end
 
       private
 
       def paths
-        [
-          File.dirname(__FILE__) + '../../settings.yml',
-          '~/.config/PowerDNS/dyndns.yml'
-        ]
+        a = []
+
+        if ENV['RACK_ENV'] == 'test'
+          a << File.dirname(__FILE__) + '/settings.yml'
+        end
+
+        a << '~/.config/PowerDNS/dyndns.yml'
       end
     end
   end
