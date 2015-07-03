@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Credentials do
-
+  
   context '#authorized?' do
     it 'yes' do
       expect(subject.authorized?('test', 'example.org')).to be true
@@ -22,6 +22,21 @@ describe Credentials do
       it 'password' do
         expect(subject.valid?('test', 'bar')).to be false
       end
+
+      context 'empty settings' do
+        before do
+          AppConfig.instance.clear
+        end
+
+        it 'does not raise' do
+          expect(subject.valid?('test', 'test')).to be false
+          expect { subject.valid?('test', 'test') }.not_to raise_exception
+        end
+
+        after do
+          AppConfig.instance.reload!
+        end
+      end
     end
 
     context 'valid' do
@@ -30,5 +45,4 @@ describe Credentials do
       end
     end
   end
-
 end

@@ -10,8 +10,14 @@ module PowerDNS
       end
 
       def self.valid?(username, password)
-        user = AppConfig.instance['users'][username]
+        begin
+          user = AppConfig.instance['users'][username]
+        rescue
+          return false
+        end
+
         return false if user.nil?
+
         user['password'] == password
       end
     end

@@ -2,8 +2,14 @@ module PowerDNS
   module DynDNS
     class AppConfig < Hash
       include Singleton
-      
+
       def initialize
+        reload!
+      end
+
+      def reload!
+        clear
+
         paths.each do |path|
           begin
             self.merge!(YAML.load_file(File.expand_path(path)))
