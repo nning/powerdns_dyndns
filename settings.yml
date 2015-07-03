@@ -1,0 +1,9 @@
+users:
+  test:
+    password: test
+    domains:
+      - example.org
+
+database:
+  adapter: 'sqlite3'
+  database: ':memory:'

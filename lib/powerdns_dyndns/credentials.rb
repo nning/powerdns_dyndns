@@ -1,3 +1,5 @@
+require 'powerdns_dyndns/app_config'
+
 module PowerDNS
   module DynDNS
     module Credentials

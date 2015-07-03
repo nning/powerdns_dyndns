@@ -17,11 +17,9 @@ module PowerDNS
 
         Database.connect!
 
-        records = DB::Record.where(name: request['hostname'])
+        record = DB::Record.where(name: request['hostname'], type: 'A').first
 
-        return 400 if records.size != 1
-
-        record = records.first
+        return 400 unless record
 
         if record.content != ip
           record.content = ip
