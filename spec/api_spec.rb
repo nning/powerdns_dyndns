@@ -18,6 +18,13 @@ describe API do
   context 'authorized' do
     before { authorize 'test', 'test' }
 
+    context 'wrong domain' do
+      it 'get /nic/update -> 401' do
+        get '/nic/update', myip: '23.23.23.23', hostname: 'example.com'
+        expect(last_response.status).to eq(401)
+      end
+    end
+
     context 'no params' do
       it 'get / -> 404' do
         get '/'
@@ -58,14 +65,14 @@ describe API do
             @domain.destroy!
           end
 
-          it 'get /nic/update (23.23.23.23) -> 400' do
+          it 'get /nic/update (23.23.23.23) -> 401' do
             get '/nic/update', myip: '23.23.23.23'
-            expect(last_response.status).to eq(400)
+            expect(last_response.status).to eq(401)
           end
 
-          it 'get /nic/update (23.23.23.23, example.com) -> 400' do
+          it 'get /nic/update (23.23.23.23, example.com) -> 401' do
             get '/nic/update', myip: '23.23.23.23', hostname: 'example.com'
-            expect(last_response.status).to eq(400)
+            expect(last_response.status).to eq(401)
           end
 
           it 'get /nic/update (23.23.23.23, example.org) -> 400' do

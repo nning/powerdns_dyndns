@@ -17,6 +17,10 @@ module PowerDNS
 
         Database.connect!
 
+        return 401 unless Credentials.authorized? \
+          request.env['REMOTE_USER'],
+          request['hostname']
+
         record = DB::Record.where(name: request['hostname'], type: 'A').first
 
         return 400 unless record
