@@ -1,7 +1,9 @@
 powerdns_dyndns
 ===============
 
-Sinatra app that implements DynDNS (dyn.com DNS update API) for SQL backed PowerDNS setups. Uses [powerdns_db_cli](https://github.com/nning/powerdns_db_cli) for the models.
+Sinatra app that implements DynDNS (dyn.com DNS update API) for SQL backed
+PowerDNS setups. Uses
+[powerdns_db_cli](https://github.com/nning/powerdns_db_cli) for the models.
 
 Installation
 ------------
@@ -17,4 +19,5 @@ Or from rubygems.org:
 Usage
 -----
 
-Configure in `settings.yml` and start with a Rack compatible server.
+Configure in `~/.config/PowerDNS/dyndns.yml` and start with a Rack compatible
+server.
