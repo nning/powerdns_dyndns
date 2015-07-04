@@ -7,9 +7,9 @@ module PowerDNS
 
       def initialize
         @@config = AppConfig.instance
-        @@test = ENV['RACK_ENV'] == 'test'
 
-        establish_connection
+        establish_connection!
+        migrate_test! if test?
       end
 
       def self.connect!
@@ -18,15 +18,8 @@ module PowerDNS
 
       private
 
-      def establish_connection
-        if @@test
-          @@connection ||= ActiveRecord::Base.establish_connection \
-            adapter: 'sqlite3', database: ':memory:'
-        else
-          ActiveRecord::Base.establish_connection(@@config[:database])
-        end
-
-        migrate_test!
+      def establish_connection!
+        ActiveRecord::Base.establish_connection(@@config['database'])
       end
 
       def migrate_test!
@@ -41,6 +34,10 @@ module PowerDNS
           DomainsMigration.migrate(:up)
           RecordsMigration.migrate(:up)
         end
+      end
+
+      def test?
+        ENV['RACK_ENV'] == 'test'
       end
     end
   end
