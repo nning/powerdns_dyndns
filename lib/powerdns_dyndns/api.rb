@@ -10,7 +10,7 @@ module PowerDNS
         Credentials.valid?(username, password)
       end
 
-      get '/nic/update' do
+      get '/nic/update/?' do
         ip = request['myip'] || request.env['REMOTE_ADDR']
 
         return 400 unless ip_valid?(ip)
