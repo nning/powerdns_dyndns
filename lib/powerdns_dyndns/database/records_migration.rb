@@ -1,7 +1,7 @@
 module PowerDNS
   module DynDNS
     class Database
-      class RecordsMigration < ActiveRecord::Migration
+      class RecordsMigration < ActiveRecord::Migration[4.2]
         def change
           create_table :records do |t|
             t.integer   :domain_id,   null: false, default: 0
