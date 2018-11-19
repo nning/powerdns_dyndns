@@ -12,7 +12,9 @@ module PowerDNS
       end
 
       get '/nic/update/?' do
-        ip = request['myip'] || request.env['REMOTE_ADDR']
+        ip = request['myip'] ||
+          request.env['HTTP_X_FORWARDED_FOR'] ||
+          request.env['REMOTE_ADDR']
 
         return 400 unless ip_valid?(ip)
 
