@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3', '~> 1.3.13'
 
   spec.add_runtime_dependency 'powerdns_db_cli', '>= 0', '~> 0.0.6'
-  spec.add_runtime_dependency 'rack', '~> 1.5.5'
+  spec.add_runtime_dependency 'rack', '~> 1.6.11'
   spec.add_runtime_dependency 'rack-test', '~> 0.6.3'
   spec.add_runtime_dependency 'sinatra', '~> 1.4.7'
 end
