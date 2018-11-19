@@ -2,6 +2,7 @@ require 'powerdns_db_cli'
 require 'powerdns_dyndns/credentials'
 require 'powerdns_dyndns/database'
 require 'sinatra'
+require 'socket'
 
 module PowerDNS
   module DynDNS
@@ -39,8 +40,8 @@ module PowerDNS
 
       def ip_valid?(a)
         return false if a.nil? || a.empty? || a == '0.0.0.0'
-        a = Addrinfo.ip(a)
-      rescue SocketError
+        a = ::Addrinfo.ip(a)
+      rescue ::SocketError
         false
       else
         a.ipv4? && !(a.ipv4_loopback? || a.ipv4_multicast? || a.ipv4_private?)
