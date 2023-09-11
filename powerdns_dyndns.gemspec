@@ -14,13 +14,16 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.13'
-  spec.add_development_dependency 'rake', '~> 12.0'
-  spec.add_development_dependency 'rspec', '~> 3.5.0'
-  spec.add_development_dependency 'sqlite3', '~> 1.3.13'
+  spec.add_development_dependency 'bundler', '~> 2.4.10'
+  spec.add_development_dependency 'rake', '~> 13.0.6'
+  spec.add_development_dependency 'rspec', '~> 3.12.0'
+  spec.add_development_dependency 'sqlite3', '~> 1.6.4'
+  spec.add_development_dependency 'puma', '~> 6.3', '>= 6.3.1'
 
-  spec.add_runtime_dependency 'powerdns_db_cli', '>= 0', '~> 0.0.6'
-  spec.add_runtime_dependency 'rack', '~> 1.6.11'
-  spec.add_runtime_dependency 'rack-test', '~> 0.6.3'
-  spec.add_runtime_dependency 'sinatra', '~> 1.4.7'
+  spec.add_runtime_dependency 'powerdns_db_cli', '>= 0', '~> 0.0.9'
+  spec.add_runtime_dependency 'rack', '~> 2.2.4'
+  spec.add_runtime_dependency 'rack-test', '~> 2.1.0'
+  spec.add_runtime_dependency 'sinatra', '~> 3.1.0'
+
+  spec.required_ruby_version = "~> 3.2"
 end
